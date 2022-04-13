@@ -1,4 +1,12 @@
 var compChoice;
+var playerChoice;
+var winner;
+let final;
+let roundsPlayed = 0
+let playerWins = 0
+let compWins = 0
+let tieCount = 0
+
 
 function computerPlay() {
     
@@ -21,101 +29,137 @@ function computerPlay() {
         compChoice = "Scissors"
     }
     
+    return compChoice
 }
 
+function playRound(playerChoice, compChoice) {
 
-var playerChoice;
+    compChoice = computerPlay();
 
-function playerInput() {
-    let userInput = prompt("1. Rock \n2. Paper\n3. Scissors\nPlease select a number: ");
-
-    if (userInput == '1') {
-        playerChoice = "Rock";
-    } else if (userInput == '2') {
-        playerChoice = "Paper"; 
-    } else if (userInput == '3') {
-        playerChoice = "Scissors"; 
-    } 
-}
-
-let winner = '';
-
-function playRound() {
-
-    console.clear();
-    computerPlay();
-    playerInput();
-
-    console.log("Computer choice: " + compChoice);
-    console.log("Your choice: " + playerChoice);
-
-    compChoice = compChoice.toLowerCase();
     playerChoice = playerChoice.toLowerCase();
+    compChoice = compChoice.toLowerCase();
     
 
     if (playerChoice == compChoice) {
-        console.log("It's a tie! Please play again!");
+        
         winner = 'tie'
     }
 
     if (playerChoice == 'rock') {
         if (compChoice == 'paper') {
-            console.log("Paper Covers Rock! You lose!");
+            
             winner = 'computer'
         } else if (compChoice == 'scissors') {
-            console.log("Rock breaks Scissors! You win!");
+            
             winner = 'player'
         }
     }
 
     if (playerChoice == 'paper') {
         if (compChoice == 'rock') {
-            console.log("Paper Covers Rock! You win!")
+            
             winner = 'player'
         } else if (compChoice == 'scissors') {
-            console.log("Scissors cut Paper! You lose!")
+
             winner = 'computer'
         }
     }
 
     if (playerChoice == 'scissors') {
         if (compChoice == 'rock') {
-            console.log("Rock breaks Scissors! You lose!")
+            
             winner = 'computer'
         } else if (compChoice == 'paper') {
-            console.log("Scissors cut Paper! You win!")
+            
             winner = 'player'
         }
     }
-
-    return winner;
     
-
+    score(winner)
 }
 
-function game() {
-    const roundsToPlay = parseInt(prompt ("How many rounds would you like to play?"))
+function score() {
+    
+    if (winner == 'player') {
+        playerWins = playerWins +1
+    } else if ( winner == 'computer') {
+        compWins = compWins +1
+    } else {
+        tieCount = tieCount +1
+    }   
+}
 
-    console.log("Rounds to play: " + roundsToPlay)
+function getScore() {
+    playerScore.textContent = playerWins
+    player.appendChild(playerScore)
+    
+    compScore.textContent = compWins
+    comp.appendChild(compScore)
 
-    let playerWins = 0
-    let compWins = 0
-    let tieCount = 0
-    for (let i = 0; i < roundsToPlay; i++) {
-        playRound();
+    tieScore.textContent = tieCount
+    tie.appendChild(tieScore)
 
-        if (winner == 'player') {
-            playerWins = playerWins +1
-        } else if ( winner == 'computer') {
-            compWins = compWins +1
-        } else {
-            tieCount = tieCount +1
-        }
-        console.log("Player Wins: " + playerWins)
-        console.log("Computer Wins: " + compWins)
-        console.log("Ties : " + tieCount)
+    if(playerWins === 5 || compWins === 5) {
+        document.getElementById('buttons').style.display = 'none'
         
+
+        if(playerWins > compWins) {
+            const p1Wins = document.createElement('img')
+            p1Wins.src = '/home/biggoofyguy/Desktop/repos/Rock-Paper-Scissors/images/p1win.png'
+            holder.appendChild(p1Wins)
+        } else {
+            const p2Wins = document.createElement('img')
+            p2Wins.src = '/home/biggoofyguy/Desktop/repos/Rock-Paper-Scissors/images/p2win.png'
+            holder.appendChild(p2Wins)
+        }
     }
+    
+    
 }
 
-game();
+document.getElementById("Rock").addEventListener("click", function() {
+    playRound('Rock', compChoice),
+    getScore();
+})
+document.getElementById("Paper").addEventListener("click", function() {
+    playRound('Paper', compChoice),
+    getScore();
+})
+document.getElementById("Scissors").addEventListener("click", function() {
+    playRound('Scissors', compChoice),
+    getScore();
+})
+
+
+const holder = document.querySelector('#holder');
+
+const player = document.createElement('div')
+player.classList = 'scoreBoard'
+player.textContent = ('Player: ')
+player.style.fontSize = '32px'
+
+const playerScore = document.createElement('div')
+playerScore.classList = 'playerScore'
+
+const comp = document.createElement('div')
+comp.classList = 'scoreBoard'
+comp.textContent = ('Comp: ')
+comp.style.fontSize = '32px'
+
+const compScore = document.createElement('div')
+compScore.classList = 'compScore'
+
+const tie = document.createElement('div')
+tie.classList = 'scoreBoard'
+tie.textContent = ('Ties: ')
+tie.style.fontSize = '32px'
+
+const tieScore = document.createElement('div')
+tieScore.classList = 'tieScore'
+
+
+
+
+holder.appendChild(player)
+holder.appendChild(comp)
+holder.appendChild(tie)
